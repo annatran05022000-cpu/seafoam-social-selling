@@ -1,0 +1,42 @@
+{{ define "main" }}
+<div class="container">
+  <p class="section-title">Latest Articles</p>
+  {{ $posts := where .Site.RegularPages "Type" "posts" }}
+  {{ if gt (len $posts) 0 }}
+  <div class="hero-grid">
+    {{ with index $posts 0 }}
+    <div class="hero-post">
+      <div class="meta">
+        <span class="tag">{{ index .Params.tags 0 | default "Marketing" }}</span>
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+        <p class="desc">{{ .Description | default .Summary }}</p>
+      </div>
+    </div>
+    {{ end }}
+    <div>
+      {{ range after 1 (first 3 $posts) }}
+      <div class="post-card" style="margin-bottom:1rem">
+        <div class="meta">
+          <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
+          <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+  <p class="section-title">All Articles</p>
+  <div class="post-grid">
+    {{ range $posts }}
+    <div class="post-card">
+      <div class="meta">
+        <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
+        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+        <p class="desc">{{ .Description | default .Summary | truncate 100 }}</p>
+        {{ range .Params.tags }}<span class="tag">{{ . }}</span>{{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+  {{ end }}
+</div>
+{{ end }}

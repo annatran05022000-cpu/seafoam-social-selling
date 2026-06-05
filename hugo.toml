@@ -1,0 +1,16 @@
+
+baseURL = "/"
+languageCode = "en-us"
+title = "Seafoam Social Selling"
+theme = "custom"
+
+[params]
+  description = "Social selling on LinkedIn, Twitter and Instagram: building pipeline through personal brand."
+  author = "Editorial Team"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[sitemap]
+  changefreq = "weekly"
+  priority = 0.5
