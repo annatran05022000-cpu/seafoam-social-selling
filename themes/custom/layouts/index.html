@@ -1,42 +1,75 @@
 {{ define "main" }}
-<div class="container">
-  <p class="section-title">Latest Articles</p>
-  {{ $posts := where .Site.RegularPages "Type" "posts" }}
-  {{ if gt (len $posts) 0 }}
-  <div class="hero-grid">
+{{ $posts := where .Site.RegularPages "Type" "posts" }}
+{{ $total := len $posts }}
+
+{{ if gt $total 0 }}
+<!-- Hero -->
+<section class="hero-section">
+  <div class="container">
     {{ with index $posts 0 }}
-    <div class="hero-post">
-      <div class="meta">
-        <span class="tag">{{ index .Params.tags 0 | default "Marketing" }}</span>
-        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-        <p class="desc">{{ .Description | default .Summary }}</p>
+    <div class="hero-card">
+      <div class="hero-thumb" style="background: linear-gradient(135deg, var(--main) 0%, var(--accent) 100%);">
+        <span class="hero-category">{{ index .Params.tags 0 | default "Featured" }}</span>
+      </div>
+      <div class="hero-body">
+        <span class="badge-featured">Featured Article</span>
+        <h1 class="hero-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
+        <p class="hero-desc">{{ .Description | default .Summary | truncate 160 }}</p>
+        <div class="hero-meta">
+          <span class="meta-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+          <span class="meta-dot">&middot;</span>
+          <span class="meta-read">{{ .ReadingTime }} min read</span>
+        </div>
+        <a href="{{ .Permalink }}" class="btn-read">Read Article &rarr;</a>
       </div>
     </div>
     {{ end }}
-    <div>
-      {{ range after 1 (first 3 $posts) }}
-      <div class="post-card" style="margin-bottom:1rem">
-        <div class="meta">
-          <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
-          <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+  </div>
+</section>
+
+<!-- Article Grid -->
+<section class="articles-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Latest Articles</h2>
+      <a href="/posts/" class="view-all">View All &rarr;</a>
+    </div>
+    <div class="post-grid">
+      {{ range after 1 $posts }}
+      <article class="post-card">
+        <div class="card-thumb" style="background: linear-gradient(135deg, var(--card) 0%, var(--main) 100%);">
+          {{ range first 1 .Params.tags }}<span class="card-category">{{ . }}</span>{{ end }}
         </div>
-      </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span>{{ .Date.Format "Jan 2, 2006" }}</span>
+            <span>&middot;</span>
+            <span>{{ .ReadingTime }} min read</span>
+          </div>
+          <h3 class="card-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+          <p class="card-desc">{{ .Description | default .Summary | truncate 110 }}</p>
+        </div>
+        <div class="card-footer">
+          <a href="{{ .Permalink }}" class="card-link">Read more &rarr;</a>
+        </div>
+      </article>
       {{ end }}
     </div>
   </div>
-  <p class="section-title">All Articles</p>
-  <div class="post-grid">
-    {{ range $posts }}
-    <div class="post-card">
-      <div class="meta">
-        <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
-        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-        <p class="desc">{{ .Description | default .Summary | truncate 100 }}</p>
-        {{ range .Params.tags }}<span class="tag">{{ . }}</span>{{ end }}
+</section>
+
+<!-- About strip -->
+<section class="about-strip">
+  <div class="container">
+    <div class="about-inner">
+      <div class="about-icon">&#128214;</div>
+      <div>
+        <h3>About This Blog</h3>
+        <p>{{ .Site.Params.description }} We help B2B teams, agencies, and sales professionals grow faster with data-driven strategies.</p>
       </div>
     </div>
-    {{ end }}
   </div>
-  {{ end }}
-</div>
+</section>
+
+{{ end }}
 {{ end }}
